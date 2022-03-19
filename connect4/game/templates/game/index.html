@@ -46,20 +46,33 @@
                 };
               };
               if (k === column.children.length - 1) {
-                if (whoseTurn) {
+                  if (whoseTurn) {
                     column.children[k].style.backgroundColor = "red";
                     whoseTurn = false;
                   } else {
                     column.children[k].style.backgroundColor = "blue";
                     whoseTurn = true;
-                  }
+                  };
               };
             };
           };
           gameBoard.appendChild(column);
+          
+
+          
+
         };
-
-
+        gameBoard.onclick = function win() {
+          let winArray = [];
+          for(let i = 0; i < 7; i++) {
+            winArray.push([]);
+            for (let j = 0; j < 6; j++) {
+              winArray[i].push(0);
+            }
+          };
+          
+        };
+        
 
     </script>
 </html>
