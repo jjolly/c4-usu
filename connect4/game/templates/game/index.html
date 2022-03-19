@@ -36,41 +36,25 @@
             frontdot.setAttribute("style", 'position: absolute; left: 5px; top: 5px; border-radius: 50%; height: 90px; width: 90px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
           };
           column.onclick = function() {
-            for(let k = 0; k < column.children.length; k++) {
-              if (column.children[k].children[1].style.backgroundColor != 'transparent') {
-                if (k === 0) {
-                  break;
+            if(column.children[0].children[1].style.backgroundColor != 'transparent') {
+              return;
+            }
+            for(let k = 1; k <= column.children.length; k++) {
+              if (k === column.children.length || column.children[k].children[1].style.backgroundColor != 'transparent') {
+                if (whoseTurn) {
+                  column.children[k - 1].children[0].style.backgroundColor = "darkred";
+                  column.children[k - 1].children[0].style.borderColor = "black";
+                  column.children[k - 1].children[1].style.backgroundColor = "red";
+                  column.children[k - 1].children[1].style.borderColor = "darkred";
+                  whoseTurn = false;
                 } else {
-                  if (whoseTurn) {
-                    column.children[k - 1].children[0].style.backgroundColor = "darkred";
-                    column.children[k - 1].children[0].style.borderColor = "black";
-                    column.children[k - 1].children[1].style.backgroundColor = "red";
-                    column.children[k - 1].children[1].style.borderColor = "darkred";
-                    whoseTurn = false;
-                  } else {
-                    column.children[k - 1].children[0].style.backgroundColor = "darkblue";
-                    column.children[k - 1].children[0].style.borderColor = "black";
-                    column.children[k - 1].children[1].style.backgroundColor = "blue";
-                    column.children[k - 1].children[1].style.borderColor = "darkblue";
-                    whoseTurn = true;
-                  }
-                  break;
-                };
-              };
-              if (k === column.children.length - 1) {
-                  if (whoseTurn) {
-                    column.children[k].children[0].style.backgroundColor = "darkred";
-                    column.children[k].children[0].style.borderColor = "black";
-                    column.children[k].children[1].style.backgroundColor = "red";
-                    column.children[k].children[1].style.borderColor = "darkred";
-                    whoseTurn = false;
-                  } else {
-                    column.children[k].children[0].style.backgroundColor = "darkblue";
-                    column.children[k].children[0].style.borderColor = "black";
-                    column.children[k].children[1].style.backgroundColor = "blue";
-                    column.children[k].children[1].style.borderColor = "darkblue";
-                    whoseTurn = true;
-                  };
+                  column.children[k - 1].children[0].style.backgroundColor = "darkblue";
+                  column.children[k - 1].children[0].style.borderColor = "black";
+                  column.children[k - 1].children[1].style.backgroundColor = "blue";
+                  column.children[k - 1].children[1].style.borderColor = "darkblue";
+                  whoseTurn = true;
+                }
+                break;
               };
             };
           };
