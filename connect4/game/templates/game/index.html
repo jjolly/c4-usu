@@ -28,18 +28,30 @@
             let square = document.createElement('div');
             column.appendChild(square);
             square.setAttribute("style", `position: absolute; left: ${0}px; top: ${j * 100}px; border-width: 2px; border-style: solid; width: 100px; height: 100px; background-color: transparent;`);
+            let backdot = document.createElement('div');
+            square.appendChild(backdot);
+            backdot.setAttribute("style", 'position: absolute; left: 0px; top: 0px; border-radius: 50%; height: 90px; width: 90px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
+            let frontdot = document.createElement('div');
+            square.appendChild(frontdot);
+            frontdot.setAttribute("style", 'position: absolute; left: 5px; top: 5px; border-radius: 50%; height: 90px; width: 90px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
           };
           column.onclick = function() {
             for(let k = 0; k < column.children.length; k++) {
-              if (column.children[k].style.backgroundColor != 'transparent') {
+              if (column.children[k].children[1].style.backgroundColor != 'transparent') {
                 if (k === 0) {
                   break;
                 } else {
                   if (whoseTurn) {
-                    column.children[k - 1].style.backgroundColor = "red";
+                    column.children[k - 1].children[0].style.backgroundColor = "darkred";
+                    column.children[k - 1].children[0].style.borderColor = "black";
+                    column.children[k - 1].children[1].style.backgroundColor = "red";
+                    column.children[k - 1].children[1].style.borderColor = "darkred";
                     whoseTurn = false;
                   } else {
-                    column.children[k - 1].style.backgroundColor = "blue";
+                    column.children[k - 1].children[0].style.backgroundColor = "darkblue";
+                    column.children[k - 1].children[0].style.borderColor = "black";
+                    column.children[k - 1].children[1].style.backgroundColor = "blue";
+                    column.children[k - 1].children[1].style.borderColor = "darkblue";
                     whoseTurn = true;
                   }
                   break;
@@ -47,10 +59,16 @@
               };
               if (k === column.children.length - 1) {
                   if (whoseTurn) {
-                    column.children[k].style.backgroundColor = "red";
+                    column.children[k].children[0].style.backgroundColor = "darkred";
+                    column.children[k].children[0].style.borderColor = "black";
+                    column.children[k].children[1].style.backgroundColor = "red";
+                    column.children[k].children[1].style.borderColor = "darkred";
                     whoseTurn = false;
                   } else {
-                    column.children[k].style.backgroundColor = "blue";
+                    column.children[k].children[0].style.backgroundColor = "darkblue";
+                    column.children[k].children[0].style.borderColor = "black";
+                    column.children[k].children[1].style.backgroundColor = "blue";
+                    column.children[k].children[1].style.borderColor = "darkblue";
                     whoseTurn = true;
                   };
               };
@@ -73,9 +91,9 @@
             winArray.push([]);
             let currentColumn = document.querySelector(`#column${i}`)
             for (let j = 0; j < rowCount; j++) {
-              if (currentColumn.children[j].style.backgroundColor === "red") {
+              if (currentColumn.children[j].children[1].style.backgroundColor === "red") {
                 winArray[i].push(player1);
-              } else if (currentColumn.children[j].style.backgroundColor === "blue") {
+              } else if (currentColumn.children[j].children[1].style.backgroundColor === "blue") {
                 winArray[i].push(player2);
               } else {
                 winArray[i].push(empty);
