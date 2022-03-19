@@ -14,6 +14,14 @@
       <div class="center-content">
         <div id="game-board"></div>
       </div>
+
+      <div class="bottom-menu">
+        <ul>
+          <li>Player1 Score: {{ player1 }}</li>
+          <li><a href="{% url 'game:index' %}">Home</a></li>
+          <li>AI Score: {{ player2 }}</li>
+        </ul>
+      </div>
     
     </body>
 

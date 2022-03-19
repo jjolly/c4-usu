@@ -17,6 +17,7 @@ body {
 .centered-content {
     display: flex;
     justify-content: center;
+	width: 100%;
 }
 
 
@@ -39,4 +40,75 @@ body {
 
 .menu-buttons ul :hover{
 	background-color: black;
+}
+
+.bottom-menu {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.bottom-menu ul{
+	background-color: darkslategray;
+	height: 64px;
+	border-radius: 16px;
+}
+
+.bottom-menu ul li{
+	display: inline;
+	color: white;
+	text-align: center;
+	font-size: 48px;
+	margin-left: 10%;
+	margin-right: 10%;
+	border-radius: 16px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.bottom-menu ul li a{
+	color: white;
+	text-decoration: none;
+}
+
+
+.bottom-menu-1 {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.bottom-menu-1 ul :hover{
+	background-color: black;
+	border-radius: 16px;
+	padding-bottom: 8px;
+}
+
+
+.bottom-menu-1 ul{
+	background-color: darkslategray;
+	height: 64px;
+	border-radius: 16px;
+}
+
+.bottom-menu-1 ul li{
+	display: inline;
+	color: white;
+	text-align: center;
+	font-size: 48px;
+	margin-left: 45%;
+	margin-right: 45%;
+	border-radius: 16px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.bottom-menu-1 ul li a{
+	color: white;
+	text-decoration: none;
+}
+.bottom-menu ul :hover{
+	background-color: black;
+	border-radius: 16px;
+	padding-bottom: 8px;
 }
