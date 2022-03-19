@@ -187,6 +187,7 @@ def move_from_board(request, pk):
     if terminal_state == NON_TERMINAL:
       col = search_for_move(board.copy())
       drop_piece(board, get_next_open_row(board, col), col, AI_PIECE)
+      terminal_state = get_terminal_state(board)
       result = (True, col, True, terminal_state)
       if terminal_state == NON_TERMINAL:
         result = (True, col, False, 0)
