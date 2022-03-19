@@ -172,7 +172,7 @@ def move_from_board(request, pk):
   if request.method == 'GET':
     if len(pk) != 42:
       return HttpResponseBadRequest('Invalid Board Configuration')
-    board = np.asarray([int(x) for x in pk]).reshape((ROW_COUNT,COLUMN_COUNT))
+    board = np.flipud(np.asarray([int(x) for x in pk]).reshape((ROW_COUNT,COLUMN_COUNT))).copy()
     result = search_for_move(board)
     resp = dict(zip(('is_valid', 'move'), result))
     return JsonResponse(resp)
