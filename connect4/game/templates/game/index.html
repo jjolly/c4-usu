@@ -10,35 +10,56 @@
 
     <body>
 
-    <div class="center-content">
-      <div id="game-board"></div>
-    </div>
-    
-
-
+      <div class="center-content">
+        <div id="game-board"></div>
+      </div>
     
     </body>
 
 
     <script>
       let gameBoard = document.querySelector("#game-board");
-      gameBoard.onclick = function () {
-        let token = document.createElement('div');
-        token.setAttribute('class', 'token')
-        token.setAttribute('style', "top: 10em; left: 50em; position: absolute; width: 50px; height: 50px; background-color: red;")
-        gameBoard.appendChild(token);
-        return true;
-      };
+      var whoseTurn = true;
+      for(let i=0; i < 7; i++) {  
+          let column = document.createElement('div');
+          column.setAttribute("style", `position: absolute; left: ${i * 100}px; top: 0px; height: 600px; width: 100px;`);
+          column.id = `column${i}`
+          for(let j=0; j < 6; j++) {
+            let square = document.createElement('div');
+            column.appendChild(square);
+            square.setAttribute("style", `position: absolute; left: ${0}px; top: ${j * 100}px; border-width: 2px; border-style: solid; width: 100px; height: 100px; background-color: transparent;`);
+          };
+          column.onclick = function() {
+            for(let k = 0; k < column.children.length; k++) {
+              if (column.children[k].style.backgroundColor != 'transparent') {
+                if (k === 0) {
+                  break;
+                } else {
+                  if (whoseTurn) {
+                    column.children[k - 1].style.backgroundColor = "red";
+                    whoseTurn = false;
+                  } else {
+                    column.children[k - 1].style.backgroundColor = "blue";
+                    whoseTurn = true;
+                  }
+                  break;
+                };
+              };
+              if (k === column.children.length - 1) {
+                if (whoseTurn) {
+                    column.children[k].style.backgroundColor = "red";
+                    whoseTurn = false;
+                  } else {
+                    column.children[k].style.backgroundColor = "blue";
+                    whoseTurn = true;
+                  }
+              };
+            };
+          };
+          gameBoard.appendChild(column);
+        };
+
 
 
     </script>
-    <!-- <script>
-      var c = document.getElementById("myCanvas");
-      var ctx = c.getContext("2d");
-      ctx.moveTo(0, 0);
-      ctx.lineTo(200, 100);
-      ctx.stroke();
-      </script> -->
-          <!-- <div class="center-content">
-   </div> -->
 </html>

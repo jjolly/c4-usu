@@ -1,15 +1,20 @@
 #game-board {
 	background-color: grey;
-	width: 500px;
-	height: 500px;
+	width: 700px;
+	height: 600px;
+	position: relative
 }
 
+#game-board > * {
+	position: absolute;
+}
 
-/* canvas {
-	border: 2px;
-	border-style: solid;
-} */
+body {
+	display: flex;
+    justify-content: center;
+}
 
+.column
 .centered-content {
     display: flex;
     justify-content: center;
