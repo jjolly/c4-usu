@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 import numpy as np
 import math
 import random
-
+from .models import Win
 
 def index(request):
   return render(request, 'game/index.html')
@@ -13,7 +13,8 @@ def twoPlayer(request):
   return render(request, 'game/two-players.html')
 
 def onePlayer(request):
-    context = {}
+    
+    context = {'player1': Win.objects.filter(winner=1).count(), 'player2': Win.objects.filter(winner=2).count()}
     return render(request, 'game/one-player.html', context)
 
 ROW_COUNT = 6
@@ -198,4 +199,9 @@ def move_from_board(request, pk):
       if terminal_state == NON_TERMINAL:
         result = (True, col, False, 0)
     resp = dict(zip(('move_valid', 'move_col', 'is_finished', 'winner'), result))
+    if resp["is_finished"]:
+      winner = Win(winner=resp['winner'])
+      winner.save()
+      print(Win.objects.filter(winner=2).count(), resp['winner'])
+
     return JsonResponse(resp)
