@@ -19,6 +19,11 @@ AI_PIECE = 2
 
 WINDOW_LENGTH = 4
 
+TERMINAL_NO_WIN = 0
+TERMINAL_PLAYER_WIN = PLAYER_PIECE
+TERMINAL_AI_WIN = AI_PIECE
+NON_TERMINAL = 3
+
 def is_valid_location(board, col):
   return board[ROW_COUNT-1][col] == 0
 
@@ -54,8 +59,14 @@ def winning_move(board, piece):
       if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
         return True
 
-def is_terminal_node(board):
-  return winning_move(board, PLAYER_PIECE) or winning_move(board, AI_PIECE) or len(get_valid_locations(board)) == 0
+def get_terminal_state(board):
+  if winning_move(board, PLAYER_PIECE):
+    return TERMINAL_PLAYER_WIN
+  elif winning_move(board, AI_PIECE):
+    return TERMINAL_AI_WIN
+  elif len(get_valid_locations(board)) == 0:
+    return TERMINAL_NO_WIN
+  return NON_TERMINAL
 
 def evaluate_window(window, piece):
   score = 0
@@ -119,18 +130,16 @@ def drop_piece(board, row, col, piece):
   board[row][col] = piece
 
 def minimax(board, depth, alpha, beta, maximizingPlayer):
+  if depth == 0:
+    return (None, score_position(board, AI_PIECE))
+  terminal_state = get_terminal_state(board)
+  if terminal_state == TERMINAL_AI_WIN:
+    return (None, 100000000000000)
+  if terminal_state == TERMINAL_PLAYER_WIN:
+    return (None, -10000000000000)
+  if terminal_state == TERMINAL_NO_WIN:
+    return (None, 0)
   valid_locations = get_valid_locations(board)
-  is_terminal = is_terminal_node(board)
-  if depth == 0 or is_terminal:
-    if is_terminal:
-      if winning_move(board, AI_PIECE):
-        return (None, 100000000000000)
-      elif winning_move(board, PLAYER_PIECE):
-        return (None, -10000000000000)
-      else: # Game is over, no more valid moves
-        return (None, 0)
-    else: # Depth is zero
-      return (None, score_position(board, AI_PIECE))
   if maximizingPlayer:
     value = -math.inf
     column = random.choice(valid_locations)
@@ -165,7 +174,7 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
 
 def search_for_move(b):
   col, minimax_score = minimax(b, 5, -math.inf, math.inf, True)
-  return (True, col)
+  return col
 
 @api_view(['GET'])
 def move_from_board(request, pk):
@@ -173,6 +182,13 @@ def move_from_board(request, pk):
     if len(pk) != 42:
       return HttpResponseBadRequest('Invalid Board Configuration')
     board = np.flipud(np.asarray([int(x) for x in pk]).reshape((ROW_COUNT,COLUMN_COUNT))).copy()
-    result = search_for_move(board)
-    resp = dict(zip(('is_valid', 'move'), result))
+    terminal_state = get_terminal_state(board)
+    result = (False, 0, True, terminal_state)
+    if terminal_state == NON_TERMINAL:
+      col = search_for_move(board.copy())
+      drop_piece(board, get_next_open_row(board, col), col, AI_PIECE)
+      result = (True, col, True, terminal_state)
+      if terminal_state == NON_TERMINAL:
+        result = (True, col, False, 0)
+    resp = dict(zip(('move_valid', 'move_col', 'is_finished', 'winner'), result))
     return JsonResponse(resp)
