@@ -36,11 +36,9 @@
             frontdot.setAttribute("style", 'position: absolute; left: 5px; top: 5px; border-radius: 50%; height: 90px; width: 90px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
           };
           column.onclick = function() {
-            if(column.children[0].children[1].style.backgroundColor != 'transparent') {
-              return;
-            }
-            for(let k = 1; k <= column.children.length; k++) {
+            for(let k = 0; k <= column.children.length; k++) {
               if (k === column.children.length || column.children[k].children[1].style.backgroundColor != 'transparent') {
+                if(k === 0) break;
                 if (whoseTurn) {
                   column.children[k - 1].children[0].style.backgroundColor = "darkred";
                   column.children[k - 1].children[0].style.borderColor = "black";
