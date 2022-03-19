@@ -1,7 +1,7 @@
 #game-board {
 	background-color: grey;
-	width: 700px;
-	height: 600px;
+	width: 1050px;
+	height: 900px;
 	position: relative
 }
 
@@ -14,13 +14,24 @@ body {
     justify-content: center;
 }
 
-.column
 .centered-content {
     display: flex;
     justify-content: center;
 }
 
-.token {
-	background-color: red;
-	border-radius: 5em;
+
+.menu-buttons ul li a{
+	color: white;
+}
+
+
+.menu-buttons ul li {
+	display: inline;
+	font-size: 48px;
+	padding: 24px;
+	margin: 12px;
+	margin-left: 96px;
+	margin-top: 30px;
+	background-color: darkslategray;
+	border-radius: 8px;
 }

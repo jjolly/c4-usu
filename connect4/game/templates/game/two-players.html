@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'game/style.css' %}" type="text/css" />
+        <title>template.html</title>
+    </head>
+
+    <body>
+
+      <div class="center-content">
+        <div id="game-board"></div>
+        
+      </div>
+    
+    </body>
+
+
+    <script>
+      let gameBoard = document.querySelector("#game-board");
+      var whoseTurn = true;
+      for(let i=0; i < 7; i++) {  
+          let column = document.createElement('div');
+          column.setAttribute("style", `position: absolute; left: ${i * 150}px; top: 0px; height: 1050px; width: 150px;`);
+          column.id = `column${i}`
+          for(let j=0; j < 6; j++) {
+            let square = document.createElement('div');
+            column.appendChild(square);
+            square.setAttribute("style", `position: absolute; left: ${0}px; top: ${j * 150}px; border-width: 2px; border-style: solid; width: 150px; height: 150px; background-color: transparent;`);
+            let backdot = document.createElement('div');
+            square.appendChild(backdot);
+            backdot.setAttribute("style", 'position: absolute; left: 0px; top: 0px; border-radius: 50%; height: 140px; width: 140px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
+            let frontdot = document.createElement('div');
+            square.appendChild(frontdot);
+            frontdot.setAttribute("style", 'position: absolute; left: 5px; top: 5px; border-radius: 50%; height: 140px; width: 140px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
+          };
+          column.onclick = function() {
+            for(let k = 0; k < column.children.length; k++) {
+              if (column.children[k].children[0].style.backgroundColor != 'transparent') {
+                if (k === 0) {
+                  break;
+                } else {
+                  if (whoseTurn) {
+                    column.children[k - 1].children[0].style.backgroundColor = "darkred";
+                    column.children[k - 1].children[0].style.borderColor = "black";
+                    column.children[k - 1].children[1].style.backgroundColor = "red";
+                    column.children[k - 1].children[1].style.borderColor = "darkred";
+                    whoseTurn = false;
+                  } else {
+                    column.children[k - 1].children[0].style.backgroundColor = "darkblue";
+                    column.children[k - 1].children[0].style.borderColor = "black";
+                    column.children[k - 1].children[1].style.backgroundColor = "blue";
+                    column.children[k - 1].children[1].style.borderColor = "darkblue";
+                    whoseTurn = true;
+                  }
+                  break;
+                };
+              };
+              if (k === column.children.length - 1) {
+                  if (whoseTurn) {
+                    column.children[k].children[0].style.backgroundColor = "darkred";
+                    column.children[k].children[0].style.borderColor = "black";
+                    column.children[k].children[1].style.backgroundColor = "red";
+                    column.children[k].children[1].style.borderColor = "darkred";
+                    whoseTurn = false;
+                  } else {
+                    column.children[k].children[0].style.backgroundColor = "darkblue";
+                    column.children[k].children[0].style.borderColor = "black";
+                    column.children[k].children[1].style.backgroundColor = "blue";
+                    column.children[k].children[1].style.borderColor = "darkblue";
+                    whoseTurn = true;
+                  };
+              };
+            };
+          };
+          gameBoard.appendChild(column);
+          
+
+          
+
+        };
+        gameBoard.onclick = function () {
+          let winArray = [];
+          let colCount = 7;
+          let rowCount = 6;
+          let empty = 0;
+          let player1 = 1;
+          let player2 = 2;
+          for (let i = 0; i < colCount; i++) {
+            winArray.push([]);
+            let currentColumn = document.querySelector(`#column${i}`)
+            for (let j = 0; j < rowCount; j++) {
+              if (currentColumn.children[j].children[1].style.backgroundColor === "red") {
+                winArray[i].push(player1);
+              } else if (currentColumn.children[j].children[1].style.backgroundColor === "blue") {
+                winArray[i].push(player2);
+              } else {
+                winArray[i].push(empty);
+              };
+            }
+          };
+
+          let alertVal = false;
+          //Check Vertical
+          for (let i = 0; i < colCount; i++) {
+            for (let j = 0; j < rowCount - 3; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i][j + 1] && winArray[i][j] === winArray[i][j + 2] && winArray[i][j] === winArray[i][j + 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          //Check Horizontal
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 0; j < rowCount; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j] && winArray[i][j] === winArray[i + 2][j] && winArray[i][j] === winArray[i + 3][j] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          //Check Diagonal Up
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 3; j < rowCount; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j - 1] && winArray[i][j] === winArray[i + 2][j - 2] && winArray[i][j] === winArray[i + 3][j - 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+
+          //Check Diagonal Down
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 0; j < rowCount - 3; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j + 1] && winArray[i][j] === winArray[i + 2][j + 2] && winArray[i][j] === winArray[i + 3][j + 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          if (alertVal) {
+            //Add some sort of post value through django
+            window.location.reload();
+          };
+        };
+        
+        
+    </script>
+</html>

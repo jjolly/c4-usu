@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'game/style.css' %}" type="text/css" />
+        <title>template.html</title>
+    </head>
+
+    <body>
+
+      <div class="center-content">
+        <div id="game-board"></div>
+      </div>
+    
+    </body>
+
+
+    <script>
+      let gameBoard = document.querySelector("#game-board");
+      for(let i=0; i < 7; i++) {  
+          let column = document.createElement('div');
+          column.setAttribute("style", `position: absolute; left: ${i * 150}px; top: 0px; height: 1050px; width: 150px;`);
+          column.id = `column${i}`
+          for(let j=0; j < 6; j++) {
+            let square = document.createElement('div');
+            column.appendChild(square);
+            square.setAttribute("style", `position: absolute; left: ${0}px; top: ${j * 150}px; border-width: 2px; border-style: solid; width: 150px; height: 150px; background-color: transparent;`);
+            let backdot = document.createElement('div');
+            square.appendChild(backdot);
+            backdot.setAttribute("style", 'position: absolute; left: 0px; top: 0px; border-radius: 50%; height: 140px; width: 140px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
+            let frontdot = document.createElement('div');
+            square.appendChild(frontdot);
+            frontdot.setAttribute("style", 'position: absolute; left: 5px; top: 5px; border-radius: 50%; height: 140px; width: 140px; background-color: transparent; border-width: 2px; border-color: transparent; border-style: solid;');
+          };
+          column.onclick = function() {
+            for(let k = 0; k <= column.children.length; k++) {
+              if (k === column.children.length || column.children[k].children[1].style.backgroundColor != 'transparent') {
+                if(k === 0) break;
+                column.children[k - 1].children[0].style.backgroundColor = "darkred";
+                column.children[k - 1].children[0].style.borderColor = "black";
+                column.children[k - 1].children[1].style.backgroundColor = "red";
+                column.children[k - 1].children[1].style.borderColor = "darkred";
+                break;
+              };
+            };
+            let winStr = "";
+            let colCount = 7;
+            let rowCount = 6;
+            let empty = 0;
+            let player1 = 1;
+            let player2 = 2;
+            for (let i = 0; i < rowCount; i++) {
+              for (let j = 0; j < colCount; j++) {
+                let currentColumn = document.querySelector(`#column${j}`)
+                if (currentColumn.children[i].children[1].style.backgroundColor === "red") {
+                  winStr += player1;
+                } else if (currentColumn.children[i].children[1].style.backgroundColor === "blue") {
+                  winStr += player2;
+                } else {
+                  winStr += empty;
+                };
+              }
+            };
+
+            new Promise((resolve, reject) => {
+              $.getJSON({
+                url: "/game/api/v1/move/" + winStr,
+                success: function(data) {
+                  resolve(data)
+                },
+              });
+            }).then((data) => {
+              if (data.move_valid) {
+                let moveCol = document.querySelector(`#column${data.move_col}`);
+                for(let i = 0; i < rowCount; i++) {
+                  if(moveCol.children[rowCount - 1 - i].children[1].style.backgroundColor === "transparent") {
+                    moveCol.children[rowCount - 1 - i].children[0].style.backgroundColor = "darkblue";
+                    moveCol.children[rowCount - 1 - i].children[0].style.borderColor = "black";
+                    moveCol.children[rowCount - 1 - i].children[1].style.backgroundColor = "blue";
+                    moveCol.children[rowCount - 1 - i].children[1].style.borderColor = "darkblue";
+                    break;
+                  }
+                }
+              }
+              if (data.is_finished) {
+                if(data.winner == empty) {
+                  alertVal = confirm(`The game is a draw`);
+                } else {
+                  alertVal = confirm(`Player ${data.winner} won!`);
+                }
+                location.reload();
+              }
+            });
+          };
+          gameBoard.appendChild(column);
+        };
+    </script>
+</html>

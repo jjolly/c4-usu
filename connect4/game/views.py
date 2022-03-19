@@ -7,8 +7,14 @@ import random
 
 
 def index(request):
+  return render(request, 'game/index.html')
+
+def twoPlayer(request):
+  return render(request, 'game/two-players.html')
+
+def onePlayer(request):
     context = {}
-    return render(request, 'game/index.html', context)
+    return render(request, 'game/one-player.html', context)
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
