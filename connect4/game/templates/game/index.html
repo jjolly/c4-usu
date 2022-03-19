@@ -46,42 +46,41 @@
                 break;
               };
             };
-          };
-          gameBoard.appendChild(column);
-          
+            let winStr = "";
+            let colCount = 7;
+            let rowCount = 6;
+            let empty = 0;
+            let player1 = 1;
+            let player2 = 2;
+            for (let i = 0; i < rowCount; i++) {
+              for (let j = 0; j < colCount; j++) {
+                let currentColumn = document.querySelector(`#column${j}`)
+                if (currentColumn.children[i].children[1].style.backgroundColor === "red") {
+                  winStr += player1;
+                } else if (currentColumn.children[i].children[1].style.backgroundColor === "blue") {
+                  winStr += player2;
+                } else {
+                  winStr += empty;
+                };
+              }
+            };
 
-          
-
-        };
-        gameBoard.onclick = function () {
-          let winStr = "";
-          let colCount = 7;
-          let rowCount = 6;
-          let empty = 0;
-          let player1 = 1;
-          let player2 = 2;
-          for (let i = 0; i < rowCount; i++) {
-            for (let j = 0; j < colCount; j++) {
-              let currentColumn = document.querySelector(`#column${j}`)
-              if (currentColumn.children[i].children[1].style.backgroundColor === "red") {
-                winStr += player1;
-              } else if (currentColumn.children[i].children[1].style.backgroundColor === "blue") {
-                winStr += player2;
-              } else {
-                winStr += empty;
-              };
-            }
-          };
-
-          $("document").get("/game/api/v1/move/" + winStr, function(data) {
+            new Promise((resolve, reject) => {
+              $.getJSON({
+                url: "/game/api/v1/move/" + winStr,
+                success: function(data) {
+                  resolve(data)
+                },
+              });
+            }).then((data) => {
               if (data.move_valid) {
                 let moveCol = document.querySelector(`#column${data.move_col}`);
                 for(let i = 0; i < rowCount; i++) {
-                  if(moveCol.children[i].children[1].style.backgroundColor === "transparent") {
-                    moveCol.children[i].children[0].style.backgroundColor = "darkblue";
-                    moveCol.children[i].children[0].style.borderColor = "black";
-                    moveCol.children[i].children[1].style.backgroundColor = "blue";
-                    moveCol.children[i].children[1].style.borderColor = "darkblue";
+                  if(moveCol.children[rowCount - 1 - i].children[1].style.backgroundColor === "transparent") {
+                    moveCol.children[rowCount - 1 - i].children[0].style.backgroundColor = "darkblue";
+                    moveCol.children[rowCount - 1 - i].children[0].style.borderColor = "black";
+                    moveCol.children[rowCount - 1 - i].children[1].style.backgroundColor = "blue";
+                    moveCol.children[rowCount - 1 - i].children[1].style.borderColor = "darkblue";
                     break;
                   }
                 }
@@ -92,11 +91,11 @@
                 } else {
                   alertVal = confirm(`Player ${data.winner} won!`);
                 }
-                windows.location.reload();
+                location.reload();
               }
-            }, "json");
+            });
+          };
+          gameBoard.appendChild(column);
         };
-        
-
     </script>
 </html>
