@@ -62,15 +62,73 @@
           
 
         };
-        gameBoard.onclick = function win() {
+        gameBoard.onclick = function () {
           let winArray = [];
-          for(let i = 0; i < 7; i++) {
+          let colCount = 7;
+          let rowCount = 6;
+          let empty = 0;
+          let player1 = 1;
+          let player2 = 2;
+          for (let i = 0; i < colCount; i++) {
             winArray.push([]);
-            for (let j = 0; j < 6; j++) {
-              winArray[i].push(0);
+            let currentColumn = document.querySelector(`#column${i}`)
+            for (let j = 0; j < rowCount; j++) {
+              if (currentColumn.children[j].style.backgroundColor === "red") {
+                winArray[i].push(player1);
+              } else if (currentColumn.children[j].style.backgroundColor === "blue") {
+                winArray[i].push(player2);
+              } else {
+                winArray[i].push(empty);
+              };
             }
           };
-          
+
+          let alertVal = false;
+          //Check Vertical
+          for (let i = 0; i < colCount; i++) {
+            for (let j = 0; j < rowCount - 3; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i][j + 1] && winArray[i][j] === winArray[i][j + 2] && winArray[i][j] === winArray[i][j + 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          //Check Horizontal
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 0; j < rowCount; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j] && winArray[i][j] === winArray[i + 2][j] && winArray[i][j] === winArray[i + 3][j] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          //Check Diagonal Up
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 3; j < rowCount; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j - 1] && winArray[i][j] === winArray[i + 2][j - 2] && winArray[i][j] === winArray[i + 3][j - 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+
+          //Check Diagonal Down
+          for (let i = 0; i < colCount - 3; i++) {
+            for (let j = 0; j < rowCount - 3; j ++) {
+              if (winArray[i][j] !== 0) {
+                if (winArray[i][j] === winArray[i + 1][j + 1] && winArray[i][j] === winArray[i + 2][j + 2] && winArray[i][j] === winArray[i + 3][j + 3] ) {
+                  alertVal = confirm(`Player ${winArray[i][j]} won!`);
+                };  
+              };
+            };
+          };
+          if (alertVal) {
+            //Add some sort of post value through django
+            window.location.reload();
+          };
         };
         
 
