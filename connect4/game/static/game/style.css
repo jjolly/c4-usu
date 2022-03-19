@@ -1,5 +1,21 @@
-.game-board {
+#game-board {
 	background-color: grey;
-	width=10px;
-	height=10px;
+	width: 500px;
+	height: 500px;
+}
+
+
+/* canvas {
+	border: 2px;
+	border-style: solid;
+} */
+
+.centered-content {
+    display: flex;
+    justify-content: center;
+}
+
+.token {
+	background-color: red;
+	border-radius: 5em;
 }

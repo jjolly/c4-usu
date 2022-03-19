@@ -3,11 +3,42 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'game/style.css' %}" type="text/css" />
         <title>template.html</title>
     </head>
 
     <body>
-		<div class="game-board"></div>
+
+    <div class="center-content">
+      <div id="game-board"></div>
+    </div>
+    
+
+
+    
     </body>
+
+
+    <script>
+      let gameBoard = document.querySelector("#game-board");
+      gameBoard.onclick = function () {
+        let token = document.createElement('div');
+        token.setAttribute('class', 'token')
+        token.setAttribute('style', "top: 10em; left: 50em; position: absolute; width: 50px; height: 50px; background-color: red;")
+        gameBoard.appendChild(token);
+        return true;
+      };
+
+
+    </script>
+    <!-- <script>
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.moveTo(0, 0);
+      ctx.lineTo(200, 100);
+      ctx.stroke();
+      </script> -->
+          <!-- <div class="center-content">
+   </div> -->
 </html>
