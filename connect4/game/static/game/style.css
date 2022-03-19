@@ -22,6 +22,7 @@ body {
 
 .menu-buttons ul li a{
 	color: white;
+	text-decoration: none;
 }
 
 
@@ -34,4 +35,8 @@ body {
 	margin-top: 30px;
 	background-color: darkslategray;
 	border-radius: 8px;
+}
+
+.menu-buttons ul :hover{
+	background-color: black;
 }
